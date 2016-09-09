@@ -23,9 +23,6 @@ package:
 functions:
   registryGet:
     handler: lib/registry/get/index.handler
-    environment:
-      REGION: "${self:provider.region}"
-      BUCKET: "${self:service}"
     events:
       - http:
           path: registry/{id}
