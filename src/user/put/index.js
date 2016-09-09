@@ -37,9 +37,7 @@ const loginToNPM = async ({ id, registry, body }) => {
 export const handler = async (event, context, callback) => {
   return callback(null, await (async () => {
     try {
-      const user = await loginToNPM(event)
-      return user;
-      // return await storeAPIKey(user.token, event.id)
+      return await loginToNPM(event)
     } catch (error) {
       return { error: error.message }
     }
