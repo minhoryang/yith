@@ -1,0 +1,9 @@
+dependencies:
+  override:
+    - npm install serverless -g
+
+deployment:
+  prod:
+    branch: master
+    commands:
+      - serverless deploy --stage prod
