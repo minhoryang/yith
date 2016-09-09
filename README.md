@@ -14,10 +14,10 @@ It is compatiable with the latest version of the `npm` cli.
 `https://abcd12345.execute-api.eu-west-1.amazonaws.com/dev/registry/`
 
 #### Supported Features
-* `npm publish`
-* `npm install`
-* `npm install@version`
-* `npm info`
+* `npm publish` - Stores all packages within S3 (Never publishes to real npm)
+* `npm install` - Looks in S3 first, if it does not exist grabs from real npm
+* `npm install@version`- Looks in S3 first, if it does not exist grabs from real npm
+* `npm info` - Looks in S3 first, if it does not exist grabs from real npm
 
 #### Roadmap
 ##### npm search
