@@ -6,7 +6,8 @@
     "lint": "$(npm bin)/standard",
     "clean": "rm -rf lib",
     "babelify": "$(npm bin)/babel ./src -d ./lib",
-    "build": "npm run clean && npm run babelify && $(npm bin)/serverless deploy"
+    "build": "npm run clean && npm run babelify && $(npm bin)/serverless deploy --stage dev",
+    "deploy": "npm run clean && npm run babelify && $(npm bin)/serverless deploy --stage prod"
   },
   "author": "Craftship Ltd <hello@craftship.io>",
   "license": "MIT",
@@ -21,7 +22,7 @@
     "babel-plugin-transform-es2015-modules-commonjs": "^6.14.0",
     "babel-plugin-transform-runtime": "^6.12.0",
     "babel-preset-es2015": "^6.14.0",
-    "serverless": "^1.0.0-rc.1",
+    "serverless": "git://github.com/craftship/serverless.git",
     "standard": "^7.1.2"
   },
   "standard": {
