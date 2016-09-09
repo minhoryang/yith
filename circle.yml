@@ -6,4 +6,4 @@ deployment:
   prod:
     branch: master
     commands:
-      - serverless deploy --stage prod
+      - npm run deploy
