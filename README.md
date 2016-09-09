@@ -21,7 +21,10 @@ It is compatiable with the latest version of the `npm` cli.
 
 #### Roadmap
 ##### npm search
-* Ability to search packages held within the private registry as well as npm itself.
+* Ability to search packages held within the private registry as well as npm itself
+
+##### npm cache
+* Upon fetching npm modules cache / store them within S3
 
 ##### user interface
 * Showcase most popular packages on the home page
