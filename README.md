@@ -7,7 +7,7 @@ Yith is a simple npm registry to allow companies that wish to keep their intelle
 It is compatiable with the latest version of the `npm` cli.
 
 ### Getting Started
-1. Ensure you have administrator credentials set for you AWS account in `~/.aws/credentials`
+1. Ensure you have administrator credentials set for your AWS account in `~/.aws/credentials`
 2. `npm i`
 3. `npm run build`
 4. `npm set registry <url>` - url being the one shown in the terminal after deployment completes, such as:
