@@ -1,36 +1,14 @@
 import AWS from 'aws-sdk'
-import Promise from 'bluebird'
 import fetch from 'node-fetch'
 
-AWS.config.region = process.env.SERVERLESS_REGION
+const loginToNPM = async ({ id, registry, body }) => {
+  const {
+    name,
+    password,
+    email
+  } = JSON.parse(body)
 
-fetch.Promise = Promise
-
-const APIGateway = new Promise.promisifyAll(new AWS.APIGateway())
-
-// TODO: Awaiting AWS to pull their finger out and
-// upgrade the aws-sdk for lambdas to the latest version
-// before using api keys to secure private registry.
-const storeAPIKey = async (key, id) => {
-  const params = {
-    description: `Auto generated key from yith for ${id}`,
-    enabled: true,
-    generateDistinctId: false,
-    name: id,
-    value: key
-  }
-
-  try {
-    const res = await APIGateway.createApiKeyAsync(params)
-
-    return res
-  } catch (error) {
-    return { error: error.message }
-  }
-}
-
-const loginToNPM = async (id, { name, password, email }) => {
-  const body = {
+  const reqBody = {
     _id: id,
     name,
     password,
@@ -45,23 +23,25 @@ const loginToNPM = async (id, { name, password, email }) => {
     headers: {
       'content-type': 'application/json'
     },
-    body: JSON.stringify(body)
+    body: JSON.stringify(reqBody)
   }
 
   try {
-    const response = await fetch(`${process.env.NPM_REGISTRY}-/user/${id}`, req)
+    const response = await fetch(`${registry}-/user/${id}`, req)
     return await response.json()
   } catch (error) {
     return { error: error.message }
   }
 }
 
-export default async (event) => {
-  try {
-    const user = await loginToNPM(event.id, event.body)
-    return user;
-    //return await storeAPIKey(user.token, event.id)
-  } catch (error) {
-    return { error: error.message }
-  }
+export const handler = async (event, context, callback) => {
+  return callback(null, await (async () => {
+    try {
+      const user = await loginToNPM(event)
+      return user;
+      // return await storeAPIKey(user.token, event.id)
+    } catch (error) {
+      return { error: error.message }
+    }
+  })())
 }

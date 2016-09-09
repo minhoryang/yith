@@ -14,31 +14,41 @@ provider:
         - "logs:CreateLogGroup"
         - "logs:CreateLogStream"
         - "logs:PutLogEvents"
-      Resource: "arn:aws:s3:::${self:service}/*"
+      Resource: "arn:aws:s3:::${self:service}*"
 
 package:
   exclude:
     - ./src
 
 functions:
-  registryGet:
+  packageGet:
     handler: lib/package/get/index.handler
     events:
       - http:
-          path: registry/{id}
+          path: "registry/{id}"
           method: get
           request:
             template:
-              application/json: '{ "id": "$input.params(''id'')", "registry": "https://registry.npmjs.org/", "bucket": "yith", "region": "eu-west-1" }'
-  registryPut:
+              application/json: '{ "id": "$input.params(''id'')", "registry": "https://registry.npmjs.org/", "bucket": "${self:service}-${opt:stage}", "region": "eu-west-1" }'
+  packagePut:
     handler: lib/package/put/index.handler
     events:
       - http:
-          path: registry/{id}
+          path: "registry/{id}"
           method: put
           request:
             template:
-              application/json: '{ "id": "$input.params(''id'')", "body": "$input.json(''$'')", "registry": "https://registry.npmjs.org/", "bucket": "yith", "region": "eu-west-1" }'
+              application/json: '{ "id": "$input.params(''id'')", "body": "$util.escapeJavaScript($input.json(''$''))", "registry": "https://registry.npmjs.org/", "bucket": "${self:service}-${opt:stage}", "region": "eu-west-1" }'
+  userPut:
+    handler: lib/user/put/index.handler
+    events:
+      - http:
+          path: "registry/-/user/{id}"
+          method: put
+          statusCode: 201
+          request:
+            template:
+              application/json: '{ "id": "$input.params(''id'')", "body": "$util.escapeJavaScript($input.json(''$''))", "registry": "https://registry.npmjs.org/" }'
 
 resources:
   Resources:
@@ -46,4 +56,4 @@ resources:
       Type: AWS::S3::Bucket
       Properties:
         AccessControl: PublicRead
-        BucketName: yith
+        BucketName: ${self:service}-${opt:stage}

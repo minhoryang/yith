@@ -3,13 +3,6 @@ import Promise from 'bluebird'
 
 let s3 = null
 
-const storePackageJson = async ({ name, json }) => {
-  await s3.putObjectAsync({
-    Key: `${name}/index.json`,
-    Body: json
-  })
-}
-
 const getPackage = async (id) => {
   const meta = await s3.getObjectAsync({
     Key: `${id}/index.json`
@@ -26,7 +19,7 @@ export const handler = async (event, context, callback) => {
   }))
 
   return callback(null, await (async () => {
-    const pkg = event.body
+    const pkg = JSON.parse(event.body)
     const name = event.id
     const version = pkg['dist-tags']['latest']
     const versionData = pkg['versions'][version]
@@ -43,15 +36,11 @@ export const handler = async (event, context, callback) => {
       }
     }
 
-    const opts = {
-      name,
-      version,
-      data: pkg['_attachments'][`${name}-${version}.tgz`]['data'],
-      json: JSON.stringify(data)
-    }
-
     try {
-      await storePackageJson(opts)
+      await s3.putObjectAsync({
+        Key: `${name}/index.json`,
+        Body: JSON.stringify(data)
+      })
       return { success: true }
     } catch (error) {
       return {
