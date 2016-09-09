@@ -3,45 +3,46 @@ service: yith
 provider:
   name: aws
   runtime: nodejs4.3
-# you can add statements to the Lambda function's IAM Role here
-#  iamRoleStatements:
-#    - Effect: "Allow"
-#      Action:
-#        - "s3:ListBucket"
-#      Resource: { "Fn::Join" : ["", ["arn:aws:s3:::", { "Ref" : "ServerlessDeploymentBucket" } ] ]  }
-#    - Effect: "Allow"
-#      Action:
-#        - "s3:PutObject"
-#      Resource:
-#        Fn::Join:
-#          - ""
-#          - - "arn:aws:s3:::"
-#            - "Ref" : "ServerlessDeploymentBucket"
-
-# you can overwrite defaults here
-defaults:
   stage: dev
   region: eu-west-1
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "s3:ListBucket"
+        - "s3:GetObject"
+        - "s3:PutObject"
+        - "logs:CreateLogGroup"
+        - "logs:CreateLogStream"
+        - "logs:PutLogEvents"
+      Resource: "arn:aws:s3:::${self:service}/*"
 
-# you can add packaging information here
-#package:
-#  include:
-#    - include-me.js
-#  exclude:
-#    - exclude-me.js
-#  artifact: my-service-code.zip
+package:
+  exclude:
+    - ./src
 
 functions:
-  packageGet:
-    handler: package/get/index.handler
+  registryGet:
+    handler: lib/registry/get/index.handler
+    environment:
+      REGION: "${self:provider.region}"
+      BUCKET: "${self:service}"
     events:
       - http:
-          path: hello
+          path: registry/{id}
           method: get
+          request:
+            template:
+              application/json: '{ "id": "$input.params(''id'')", "registry": "https://registry.npmjs.org/", "bucket": "yith", "region": "eu-west-1" }'
 
 # you can add CloudFormation resource templates here
-#resources:
-#  Resources:
+resources:
+  Resources:
+    PackageStorage:
+      Type: AWS::S3::Bucket
+      Properties:
+        AccessControl: PublicRead
+        BucketName: yith
+#
 #    NewResource:
 #      Type: AWS::S3::Bucket
 #      Properties:
