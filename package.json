@@ -1,0 +1,30 @@
+{
+  "name": "yith",
+  "version": "0.0.1",
+  "description": "Serverless private npm registry",
+  "scripts": {
+    "lint": "$(npm bin)/standard",
+    "clean": "rm -rf lib",
+    "babelify": "$(npm bin)/babel ./src -d ./lib",
+    "build": "npm run clean && npm run babelify && $(npm bin)/serverless deploy"
+  },
+  "author": "Craftship Ltd <hello@craftship.io>",
+  "license": "MIT",
+  "dependencies": {
+    "bluebird": "^3.4.1",
+    "node-fetch": "^1.6.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.14.0",
+    "babel-eslint": "^6.1.2",
+    "babel-plugin-transform-async-to-generator": "^6.8.0",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.14.0",
+    "babel-plugin-transform-runtime": "^6.12.0",
+    "babel-preset-es2015": "^6.14.0",
+    "serverless": "^1.0.0-rc.1",
+    "standard": "^7.1.2"
+  },
+  "standard": {
+    "parser": "babel-eslint"
+  }
+}
