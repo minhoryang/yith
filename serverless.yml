@@ -22,7 +22,7 @@ package:
 
 functions:
   registryGet:
-    handler: lib/registry/get/index.handler
+    handler: lib/package/get/index.handler
     events:
       - http:
           path: registry/{id}
@@ -31,7 +31,7 @@ functions:
             template:
               application/json: '{ "id": "$input.params(''id'')", "registry": "https://registry.npmjs.org/", "bucket": "yith", "region": "eu-west-1" }'
   registryPut:
-    handler: lib/registry/put/index.handler
+    handler: lib/package/put/index.handler
     events:
       - http:
           path: registry/{id}
