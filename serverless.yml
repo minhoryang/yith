@@ -31,7 +31,6 @@ functions:
             template:
               application/json: '{ "id": "$input.params(''id'')", "registry": "https://registry.npmjs.org/", "bucket": "yith", "region": "eu-west-1" }'
 
-# you can add CloudFormation resource templates here
 resources:
   Resources:
     PackageStorage:
@@ -39,12 +38,3 @@ resources:
       Properties:
         AccessControl: PublicRead
         BucketName: yith
-#
-#    NewResource:
-#      Type: AWS::S3::Bucket
-#      Properties:
-#        BucketName: my-new-bucket
-#  Outputs:
-#     NewOutput:
-#       Description: "Description for the output"
-#       Value: "Some output value"
