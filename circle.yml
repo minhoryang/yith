@@ -1,7 +1,3 @@
-dependencies:
-  override:
-    - npm install serverless -g
-
 deployment:
   prod:
     branch: master
