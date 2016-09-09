@@ -30,6 +30,15 @@ functions:
           request:
             template:
               application/json: '{ "id": "$input.params(''id'')", "registry": "https://registry.npmjs.org/", "bucket": "yith", "region": "eu-west-1" }'
+  registryPut:
+    handler: lib/registry/put/index.handler
+    events:
+      - http:
+          path: registry/{id}
+          method: put
+          request:
+            template:
+              application/json: '{ "id": "$input.params(''id'')", "body": "$input.json(''$'')", "registry": "https://registry.npmjs.org/", "bucket": "yith", "region": "eu-west-1" }'
 
 resources:
   Resources:
