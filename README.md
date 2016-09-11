@@ -2,19 +2,43 @@
 #### Serverless private npm registry, proxy and cache.
 
 ### Overview
-Yith is a simple npm registry to allow companies that wish to keep their intellectual property.  It allows sharing of npm modules within a company but additionally allows access to all of the modules on npm.
+Yith is a simple npm registry to allow companies that wish to
+keep their intellectual property.  It allows sharing of npm modules
+within a company but additionally allows access to all of the
+modules on npm.  It replaces npm authentication to be via github / github
+enterprise.
 
 It is compatiable with the latest version of the `npm` cli.
 
+#### Setup Environment Config
+You will need to ensure you have setup the relevant config for a GitHub
+app and endpoint within a file name called `.config-{stage}`.  Replacing
+`{stage}` with the relevant stage you are building (default is dev, e.g. `.config-dev`).
+
+``` js
+module.exports = {
+  registry: 'https://registry.npmjs.org/',
+  github: {
+    endpoint: {
+      protocol: 'https',
+      host: 'github.com',
+      pathPrefix: '/api/v3'
+    },
+    client_id: 'app_client_id',
+    secret: 'app_secret'
+  }
+}
+```
+
 ### Getting Started
-1. Ensure you have administrator credentials set for your AWS account in `~/.aws/credentials`
+1. Ensure you have elevated credentials set for your AWS account in `~/.aws/credentials`
 2. `npm i`
 3. `npm run build`
 4. `npm set registry <url>` - url being the one shown in the terminal after deployment completes, such as:
 `https://abcd12345.execute-api.eu-west-1.amazonaws.com/dev/registry/`
 
 #### Supported Features
-* `npm login` - Proxies through to real npm
+* `npm login` - via github / github enterprise (if 2FA enabled format username for npm login via cli as `username.otp` e.g. `craftship.123456`)
 * `npm publish` - Stores all packages within S3 (Never publishes to real npm)
 * `npm install` - Looks in S3 first, if it does not exist grabs from real npm
 * `npm install@version`- Looks in S3 first, if it does not exist grabs from real npm
@@ -33,7 +57,7 @@ It is compatiable with the latest version of the `npm` cli.
 * Statistics of package downloads and usage information
 
 ##### security
-* Add support for single sign on via github / github enterprise
+* ~~Add support for single sign on via github / github enterprise~~
 * Show any security vulnerabilities of dependencies for packages
 * Show any out dated depedencies for packages
 
