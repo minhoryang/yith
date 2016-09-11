@@ -1,3 +1,5 @@
+[![serverless](http://public.serverless.com/badges/v3.svg)](http://www.serverless.com)
+* * * 
 # yith
 #### Serverless private npm registry, proxy and cache.
 
