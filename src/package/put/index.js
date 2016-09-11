@@ -12,7 +12,7 @@ const getPackage = async (id) => {
   )
 }
 
-export const handler = async (event, context, callback) => {
+export const handler = async (event, context) => {
   S3 = new AWS.S3({
     region: event.region,
     params: {
