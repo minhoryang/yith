@@ -1,22 +1,24 @@
 import AWS from 'aws-sdk'
-import Promise from 'bluebird'
 
-let s3 = null
+let S3 = null
 
 const getPackage = async (id) => {
-  const meta = await s3.getObjectAsync({
+  const meta = await S3.getObject({
     Key: `${id}/index.json`
-  })
-  return JSON.parse(meta.Body.toString())
+  }).promise()
+
+  return JSON.parse(
+    meta.Body.toString()
+  )
 }
 
 export const handler = async (event, context, callback) => {
-  s3 = new Promise.promisifyAll(new AWS.S3({ // eslint-disable-line
+  S3 = new AWS.S3({
     region: event.region,
     params: {
       Bucket: event.bucket
     }
-  }))
+  })
 
   const pkg = JSON.parse(event.body)
   const name = event.id
@@ -24,6 +26,7 @@ export const handler = async (event, context, callback) => {
   const versionData = pkg['versions'][version]
 
   let data = {}
+
   try {
     data = await getPackage(name)
     data['dist-tags'].latest = version
@@ -36,11 +39,14 @@ export const handler = async (event, context, callback) => {
   }
 
   try {
-    await s3.putObjectAsync({
+    await S3.putObject({
       Key: `${name}/index.json`,
       Body: JSON.stringify(data)
+    }).promise()
+
+    return context.succeed({
+      success: true
     })
-    return context.succeed({ success: true })
   } catch (error) {
     return context.succeed({
       success: false,
