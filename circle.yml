@@ -1,5 +1,7 @@
-deployment:
-  prod:
-    branch: master
-    commands:
-      - npm run deploy
+machine:
+  node:
+    version: 6.2.2
+
+test:
+  pre:
+    - npm run lint
