@@ -1,4 +1,4 @@
-[![serverless](http://public.serverless.com/badges/v3.svg)](http://www.serverless.com) [![CircleCI](https://circleci.com/gh/craftship/yith/tree/master.svg?style=shield)](https://circleci.com/gh/craftship/yith/tree/master)
+[![serverless](http://public.serverless.com/badges/v3.svg)](http://www.serverless.com) [![CircleCI](https://circleci.com/gh/craftship/yith/tree/master.svg?style=shield)](https://circleci.com/gh/craftship/yith/tree/master) [![JavaScript Style Guide](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
 * * * 
 # yith
 #### Serverless private npm registry, proxy and cache.
@@ -65,7 +65,3 @@ module.exports = {
 
 ##### discoverability
 * Notify people via github messages of any new packages published
-
-* * *
-
-[![js-standard-style](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)
