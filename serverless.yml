@@ -4,6 +4,7 @@ provider:
   name: aws
   runtime: nodejs4.3
   stage: dev
+  registry: https://registry.npmjs.org/
   region: eu-west-1
   iamRoleStatements:
     - Effect: "Allow"
@@ -14,13 +15,18 @@ provider:
         - "logs:CreateLogGroup"
         - "logs:CreateLogStream"
         - "logs:PutLogEvents"
-      Resource: "arn:aws:s3:::${self:service}*"
+        - "apigateway:POST"
+      Resource:
+        - "arn:aws:s3:::${self:service}*"
+        - "arn:aws:apigateway:*"
 
 package:
   exclude:
-    - ./src
+    - src
 
 functions:
+  githubAuthorizer:
+    handler: lib/authorizer/index.handler
   packageGet:
     handler: lib/package/get/index.handler
     events:
@@ -29,16 +35,30 @@ functions:
           method: get
           request:
             template:
-              application/json: '{ "id": "$input.params(''id'')", "registry": "https://registry.npmjs.org/", "bucket": "${self:service}-${opt:stage}", "region": "eu-west-1" }'
+              application/json: >
+                {
+                  "id": "$input.params('id')",
+                  "registry": "${self:provider.registry}",
+                  "bucket": "${self:service}-${opt:stage}",
+                  "region": "${self:provider.region}"
+                }
   packagePut:
     handler: lib/package/put/index.handler
     events:
       - http:
           path: "registry/{id}"
           method: put
+          authorizer: githubAuthorizer
           request:
             template:
-              application/json: '{ "id": "$input.params(''id'')", "body": "$util.escapeJavaScript($input.json(''$''))", "registry": "https://registry.npmjs.org/", "bucket": "${self:service}-${opt:stage}", "region": "eu-west-1" }'
+              application/json: >
+                {
+                  "id": "$input.params('id')",
+                  "body": "$util.escapeJavaScript($input.json('$'))",
+                  "registry": "${self:provider.registry}",
+                  "bucket": "${self:service}-${opt:stage}",
+                  "region": "${self:provider.region}"
+                }
   userPut:
     handler: lib/user/put/index.handler
     events:
@@ -48,7 +68,11 @@ functions:
           statusCode: 201
           request:
             template:
-              application/json: '{ "id": "$input.params(''id'')", "body": "$util.escapeJavaScript($input.json(''$''))", "registry": "https://registry.npmjs.org/" }'
+              application/json: >
+                {
+                  "id": "$input.params('id')",
+                  "body": "$util.escapeJavaScript($input.json('$'))"
+                }
 
 resources:
   Resources:
