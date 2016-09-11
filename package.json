@@ -4,7 +4,7 @@
   "description": "Serverless private npm registry",
   "engine": "node 6.2.2",
   "scripts": {
-    "lint": "$(npm bin)/standard",
+    "lint": "standard",
     "clean": "rm -rf lib",
     "test": "mocha ./src/**/spec.js",
     "babelify": "babel ./src -d ./lib",
