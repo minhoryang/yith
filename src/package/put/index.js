@@ -18,35 +18,33 @@ export const handler = async (event, context, callback) => {
     }
   }))
 
-  return callback(null, await (async () => {
-    const pkg = JSON.parse(event.body)
-    const name = event.id
-    const version = pkg['dist-tags']['latest']
-    const versionData = pkg['versions'][version]
+  const pkg = JSON.parse(event.body)
+  const name = event.id
+  const version = pkg['dist-tags']['latest']
+  const versionData = pkg['versions'][version]
 
-    let data = {}
-    try {
-      data = await getPackage(name)
-      data['dist-tags'].latest = version
-      data['_attachments'][`${name}-${version}.tgz`] = pkg['_attachments'][`${name}-${version}.tgz`]
-      data.versions[version] = versionData
-    } catch (error) {
-      if (error.code === 'NoSuchKey') {
-        data = pkg
-      }
+  let data = {}
+  try {
+    data = await getPackage(name)
+    data['dist-tags'].latest = version
+    data['_attachments'][`${name}-${version}.tgz`] = pkg['_attachments'][`${name}-${version}.tgz`]
+    data.versions[version] = versionData
+  } catch (error) {
+    if (error.code === 'NoSuchKey') {
+      data = pkg
     }
+  }
 
-    try {
-      await s3.putObjectAsync({
-        Key: `${name}/index.json`,
-        Body: JSON.stringify(data)
-      })
-      return { success: true }
-    } catch (error) {
-      return {
-        success: false,
-        error
-      }
-    }
-  })())
+  try {
+    await s3.putObjectAsync({
+      Key: `${name}/index.json`,
+      Body: JSON.stringify(data)
+    })
+    return context.succeed({ success: true })
+  } catch (error) {
+    return context.succeed({
+      success: false,
+      error
+    })
+  }
 }
