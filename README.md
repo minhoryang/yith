@@ -63,3 +63,7 @@ module.exports = {
 
 ##### discoverability
 * Notify people via github messages of any new packages published
+
+* * *
+
+[![js-standard-style](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)
