@@ -4,4 +4,5 @@ machine:
 
 test:
   pre:
+    - npm run nsp
     - npm run lint

@@ -2,13 +2,15 @@
   "name": "yith",
   "version": "0.0.1",
   "description": "Serverless private npm registry",
+  "engine": "node 6.2.2",
   "scripts": {
     "lint": "$(npm bin)/standard",
     "clean": "rm -rf lib",
-    "test": "$(npm bin)/mocha ./src/**/spec.js",
-    "babelify": "$(npm bin)/babel ./src -d ./lib",
-    "build": "npm run clean && npm run babelify && $(npm bin)/serverless deploy --stage dev",
-    "deploy": "npm run clean && npm run babelify && $(npm bin)/serverless deploy --stage prod"
+    "test": "mocha ./src/**/spec.js",
+    "babelify": "babel ./src -d ./lib",
+    "build": "npm run clean && npm run babelify && serverless deploy --stage dev",
+    "deploy": "npm run clean && npm run babelify && serverless deploy --stage prod",
+    "nsp": "nsp check"
   },
   "author": "Craftship Ltd <hello@craftship.io>",
   "license": "MIT",
@@ -27,6 +29,7 @@
     "chai": "^3.5.0",
     "injectr": "^0.5.1",
     "mocha": "^3.0.2",
+    "nsp": "^2.6.1",
     "serverless": "git://github.com/craftship/serverless.git",
     "sinon": "^1.17.5",
     "sinon-chai": "^2.8.0",
