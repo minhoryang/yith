@@ -1,5 +1,4 @@
 import GitHub from 'github'
-import Promise from 'bluebird'
 import env from '../../../env.js'
 
 const loginToGithub = async ({ id, body }, config) => {
@@ -13,7 +12,6 @@ const loginToGithub = async ({ id, body }, config) => {
   const otp = nameParts.length > 1 ? nameParts[nameParts.length - 1] : ''
 
   const github = new GitHub({
-    Promise,
     protocol: config.github.endpoint.protocol,
     host: config.github.endpoint.host,
     pathPrefix: config.github.endpoint.pathPrefix

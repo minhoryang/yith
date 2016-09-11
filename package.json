@@ -14,7 +14,6 @@
   "license": "MIT",
   "dependencies": {
     "aws-sdk": "^2.6.1",
-    "bluebird": "^3.4.1",
     "github": "^3.0.0",
     "node-fetch": "^1.6.0"
   },

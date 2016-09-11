@@ -1,5 +1,4 @@
 import GitHub from 'github'
-import Promise from 'bluebird'
 import env from '../../env.js'
 
 const generatePolicy = (principalId, effect, resource) => {
@@ -34,7 +33,6 @@ export const handler = async ({ authorizationToken }, context) => {
   const token = tokenParts[1]
 
   const github = new GitHub({
-    Promise,
     protocol: githubConfig.endpoint.protocol,
     host: githubConfig.endpoint.host,
     pathPrefix: githubConfig.endpoint.pathPrefix
