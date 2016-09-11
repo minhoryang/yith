@@ -1,22 +1,21 @@
 import AWS from 'aws-sdk'
-import responses from './responses'
 import fetch from 'node-fetch'
-import Promise from 'bluebird'
-
-fetch.Promise = Promise
 
 const getLocally = async ({ id, bucket, region }) => {
-  const S3 = new Promise.promisifyAll(new AWS.S3({ // eslint-disable-line
+  const S3 = new AWS.S3({
     region,
     params: {
       Bucket: bucket
     }
-  }))
-
-  const meta = await S3.getObjectAsync({
-    Key: `${id}/index.json`
   })
-  return JSON.parse(meta.Body.toString())
+
+  const meta = await S3.getObject({
+    Key: `${id}/index.json`
+  }).promise()
+
+  return JSON.parse(
+    meta.Body.toString()
+  )
 }
 
 const getFromNPM = async ({ id, registry }) => {
@@ -26,19 +25,25 @@ const getFromNPM = async ({ id, registry }) => {
         accept: 'application/json'
       }
     })
-
     return await response.json()
   } catch (error) {
-    return responses.error(error)
+    return {
+      success: false,
+      error: error.message
+    }
   }
 }
 
 export const handler = async (event, context) => {
   try {
-    return context.succeed(await getLocally(event))
+    return context.succeed(
+      await getLocally(event)
+    )
   } catch (error) {
     if (error.code === 'NoSuchKey') {
-      return context.succeed(await getFromNPM(event))
+      return context.succeed(
+        await getFromNPM(event)
+      )
     }
     return context.fail(error)
   }
