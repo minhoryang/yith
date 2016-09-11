@@ -33,15 +33,13 @@ const getFromNPM = async ({ id, registry }) => {
   }
 }
 
-export const handler = async (event, context, callback) => {
-  return callback(null, await (async () => {
-    try {
-      return await getLocally(event)
-    } catch (error) {
-      if (error.code === 'NoSuchKey') {
-        return await getFromNPM(event)
-      }
-      return responses.error(error)
+export const handler = async (event, context) => {
+  try {
+    return context.succeed(await getLocally(event))
+  } catch (error) {
+    if (error.code === 'NoSuchKey') {
+      return context.succeed(await getFromNPM(event))
     }
-  })())
+    return context.fail(error)
+  }
 }
