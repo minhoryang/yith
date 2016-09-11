@@ -13,6 +13,7 @@
   "license": "MIT",
   "dependencies": {
     "bluebird": "^3.4.1",
+    "github": "^3.0.0",
     "node-fetch": "^1.6.0"
   },
   "devDependencies": {
