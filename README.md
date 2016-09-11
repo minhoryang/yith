@@ -1,4 +1,4 @@
-[![serverless](http://public.serverless.com/badges/v3.svg)](http://www.serverless.com)
+[![serverless](http://public.serverless.com/badges/v3.svg)](http://www.serverless.com) [![CircleCI](https://circleci.com/gh/craftship/yith/tree/master.svg?style=shield)](https://circleci.com/gh/craftship/yith/tree/master)
 * * * 
 # yith
 #### Serverless private npm registry, proxy and cache.
